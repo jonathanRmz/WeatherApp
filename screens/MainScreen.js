@@ -172,14 +172,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     width: '100%',
-    height: 30,
-    paddingBottom: 5,
+    height: 40,
   },
   smallTitle: {
     color: Colors.primaryDarkColor,
     fontWeight: 'bold',
-    paddingHorizontal: 10,
-    paddingRight: 20,
+    paddingHorizontal: 20,
+    paddingRight: 15,
   },
   weatherContainer: {
     flex: 1,
