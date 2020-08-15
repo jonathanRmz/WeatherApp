@@ -1,4 +1,4 @@
-import React, {useState, useRef, useContext} from 'react';
+import React, {useRef, useContext} from 'react';
 import {StyleSheet, Text, View, Pressable, Animated} from 'react-native';
 import {Switch} from 'react-native-paper';
 
@@ -24,56 +24,40 @@ const AnimationsSwitcher = () => {
 };
 
 const SettingsScreen = (props) => {
-  //const {navigation} = props;
+  const {setDegreesScale} = useContext(SettingsContext);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  //const fadeAnim = useRef(new Animated.Value(0)).current;
-  const {animationSpeed, setAnimationSpeed} = useContext(SettingsContext);
-  const {degreesScale, setDegreesScale} = useContext(SettingsContext);
-
-  // const togglePressed = (value) => {
-  //   Animated.timing(fadeAnim, {
-  //     toValue: value,
-  //     duration: 1000,
-  //   }).start();
-  // };
-
-  // useEffect(() => {
-  //   navigation.setParams({isEnableAnimations: enableAnimations});
-  // }, [enableAnimations]);
+  const togglePressed = (value) => {
+    Animated.timing(fadeAnim, {
+      toValue: value,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  };
 
   return (
     <View style={styles.screen}>
       <View style={styles.switchContainer}>
-        {/* <Animated.View></Animated.View> //animated value or animated timing */}
         <View style={styles.grayBox}>
+          <Animated.View
+            style={[
+              styles.pressedOption,
+              {
+                transform: [{translateY: fadeAnim}],
+              },
+            ]}></Animated.View>
           <Pressable
             onPress={() => {
               setDegreesScale(settings.degreesScale.fahrenheit);
-            }}
-            style={() => [
-              {
-                backgroundColor:
-                  degreesScale === settings.degreesScale.fahrenheit
-                    ? '#fff'
-                    : 'transparent',
-              },
-              styles.pressedOption,
-            ]}>
+              togglePressed(0);
+            }}>
             <Text style={styles.bigLetter}>°F</Text>
           </Pressable>
           <Pressable
             onPress={() => {
               setDegreesScale(settings.degreesScale.celsius);
-            }}
-            style={() => [
-              {
-                backgroundColor:
-                  degreesScale === settings.degreesScale.celsius
-                    ? '#fff'
-                    : 'transparent',
-              },
-              styles.pressedOption,
-            ]}>
+              togglePressed(55);
+            }}>
             <Text style={styles.bigLetter}>°C</Text>
           </Pressable>
         </View>
@@ -99,11 +83,12 @@ const styles = StyleSheet.create({
   },
   grayBox: {
     backgroundColor: Colors.primaryLightColor,
-    width: 80,
-    justifyContent: 'center',
+    width: 70,
+    height: 125,
+    justifyContent: 'flex-start',
     alignItems: 'center',
     borderRadius: 10,
-    padding: 10,
+    padding: 5,
   },
   bottomBar: {
     flexDirection: 'row',
@@ -126,7 +111,11 @@ const styles = StyleSheet.create({
   pressedOption: {
     width: '90%',
     borderRadius: 5,
-    paddingHorizontal: 5,
+    //paddingHorizontal: 5,
+    marginTop: 10,
+    backgroundColor: 'white',
+    height: 50,
+    position: 'absolute',
   },
 });
 

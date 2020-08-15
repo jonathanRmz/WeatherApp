@@ -1,20 +1,29 @@
-import React, {useCallback, useEffect, useContext, useState} from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useContext,
+  useState,
+  useLayoutEffect,
+} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 import TextButton from '../components/TextButton';
 import Colors from '../constanst/Colors';
 import LottieIcon from '../components/LottieIcon';
 import NextDaysList from '../components/NextDaysList';
+import Loader from '../components/Loader';
 
 import {CoordsContext} from '../data/CoordsContext';
 import {SettingsContext, settings} from '../data/SettingsContext';
 
 const MainScreen = (props) => {
   const {lat, long, city} = useContext(CoordsContext);
+
   const {degreesScale} = useContext(SettingsContext);
   const [currentWeather, setCurrentWeather] = useState();
   const [hourly, setHourly] = useState([]);
   const [daily, setDaily] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getWeatherData = useCallback(async () => {
     try {
@@ -81,11 +90,13 @@ const MainScreen = (props) => {
       setCurrentWeather(weather);
       setHourly(hourlyList);
       setDaily(dailyList);
+      setIsLoading(false);
     });
   }, [getWeatherData]);
 
   return (
     <View style={styles.screen}>
+      <Loader loading={isLoading} />
       <Text style={styles.bigTitle}>{city ?? 'city'}</Text>
       <Text style={styles.subTitle}>{currentWeather?.description}</Text>
       <View style={styles.imgContainer}>
